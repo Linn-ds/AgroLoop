@@ -1,0 +1,8 @@
+{
+  "name": "AgriLoop Prototype",
+  "description": "A high-fidelity mobile prototype for the AgriLoop application, featuring a live market pulse, cold storage inventory, and a B2B smart match bid decision engine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
