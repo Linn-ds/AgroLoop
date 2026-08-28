@@ -4,10 +4,9 @@
  */
 
 import { useState } from 'react';
-import { User, CheckCircle2, MapPin, BarChart3, Package, CloudSun, X, Map as MapIcon, AlertTriangle, ChevronLeft, Phone, Globe } from 'lucide-react';
+import { User, CheckCircle2, MapPin, BarChart3, Package, CloudSun, X, Map as MapIcon, AlertTriangle, ChevronLeft, Phone, Globe, Sun, CloudRain, Cloud } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 
 const priceData = [
   { day: 'Mon', price: 2800 },
@@ -261,6 +260,35 @@ export default function App() {
                     </div>
                   </div>
                 </section>
+
+                {/* 5-Day Forecast */}
+                <section className="bg-white rounded-[20px] py-4 shadow-sm overflow-hidden">
+                  <h3 className="text-[13px] font-bold text-gray-700 uppercase tracking-wide mb-3 px-4">{t("5-Day Forecast", "၅-ရက် ရာသီဥတု ခန့်မှန်းချက်")}</h3>
+                  <div className="flex overflow-x-auto gap-3 px-4 pb-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                    {[
+                      { dayEn: 'Tomorrow', dayMy: 'မနက်ဖြန်', icon: Sun, tempDay: '30°', tempNight: '22°', color: 'text-yellow-500' },
+                      { dayEn: 'Wed', dayMy: 'ဗုဒ္ဓဟူး', icon: CloudSun, tempDay: '29°', tempNight: '23°', color: 'text-yellow-400' },
+                      { dayEn: 'Thu', dayMy: 'ကြာသပတေး', icon: CloudRain, tempDay: '26°', tempNight: '21°', color: 'text-blue-400' },
+                      { dayEn: 'Fri', dayMy: 'သောကြာ', icon: Cloud, tempDay: '27°', tempNight: '22°', color: 'text-gray-400' },
+                      { dayEn: 'Sat', dayMy: 'စနေ', icon: Sun, tempDay: '31°', tempNight: '23°', color: 'text-yellow-500' },
+                    ].map((forecast, i) => (
+                      <div key={i} className="flex flex-col items-center justify-center bg-gray-50 rounded-[16px] p-3 min-w-[70px] shrink-0 border border-gray-100">
+                        <span className="text-[11px] font-bold text-gray-500 mb-2">{t(forecast.dayEn, forecast.dayMy)}</span>
+                        <forecast.icon size={24} className={`${forecast.color} mb-2`} />
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[13px] font-bold text-gray-900">{forecast.tempDay}</span>
+                          <span className="text-[11px] font-medium text-gray-400">{forecast.tempNight}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <style>{`
+                    .overflow-x-auto::-webkit-scrollbar {
+                      display: none;
+                    }
+                  `}</style>
+                </section>
+
                 <section className="bg-white rounded-[20px] p-4 shadow-sm">
                   <h3 className="text-[13px] font-bold text-gray-700 uppercase tracking-wide mb-3">{t("Farming Advice", "လယ်ယာ အကြံပြုချက်")}</h3>
                   <p className="text-[13px] text-gray-600 leading-relaxed">
@@ -311,20 +339,36 @@ export default function App() {
                   <X size={18} />
                 </button>
               </div>
-              <div className="flex-1 bg-gray-100 relative">
-                <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "DEMO_KEY"}>
-                  <Map
-                    defaultCenter={{ lat: 16.8053, lng: 96.1561 }} // Yangon center
-                    defaultZoom={11}
-                    mapId="DEMO_MAP_ID"
-                    disableDefaultUI={true}
-                    internalUsageAttributionIds={["gmp_mcp_codeassist_v1_aistudio"]}
-                  >
-                    <AdvancedMarker position={{ lat: 16.82, lng: 96.18 }} title="Yangon Central Hub" />
-                    <AdvancedMarker position={{ lat: 17.33, lng: 96.48 }} title="Bago Regional Center" />
-                  </Map>
-                </APIProvider>
-                <div className="absolute bottom-4 left-4 right-4 bg-white p-3 rounded-xl shadow-lg border border-gray-100">
+              <div className="flex-1 bg-[#e5e7eb] relative overflow-hidden">
+                {/* Dummy Map Background (Grid Pattern) */}
+                <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#9ca3af 2px, transparent 2px)', backgroundSize: '30px 30px' }}></div>
+                
+                {/* Decorative Map Elements (Rivers/Roads) */}
+                <div className="absolute top-[20%] left-[-10%] w-[120%] h-8 bg-blue-300/30 transform rotate-12"></div>
+                <div className="absolute top-[-10%] left-[30%] w-6 h-[120%] bg-white/60 transform -rotate-[15deg]"></div>
+                <div className="absolute top-[-10%] left-[50%] w-4 h-[120%] bg-white/60 transform rotate-[5deg]"></div>
+
+                {/* Pin 1 - Yangon */}
+                <div className="absolute top-[45%] left-[45%] flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="bg-[#ea4335] text-white p-1.5 rounded-full shadow-lg z-10 mb-1">
+                    <MapPin size={20} className="fill-[#ea4335]" />
+                  </div>
+                  <div className="bg-white/95 backdrop-blur text-[11px] font-bold px-2.5 py-1 rounded-md shadow-sm text-gray-800 text-center whitespace-nowrap border border-gray-100">
+                    Yangon Central Hub
+                  </div>
+                </div>
+
+                {/* Pin 2 - Bago */}
+                <div className="absolute top-[25%] left-[65%] flex flex-col items-center transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="bg-[#ea4335] text-white p-1.5 rounded-full shadow-lg z-10 mb-1">
+                    <MapPin size={20} className="fill-[#ea4335]" />
+                  </div>
+                  <div className="bg-white/95 backdrop-blur text-[11px] font-bold px-2.5 py-1 rounded-md shadow-sm text-gray-800 text-center whitespace-nowrap border border-gray-100">
+                    Bago Regional Center
+                  </div>
+                </div>
+
+                <div className="absolute bottom-4 left-4 right-4 bg-white p-3 rounded-xl shadow-lg border border-gray-100 z-20">
                    <div className="text-[12px] text-gray-600 font-medium flex items-center gap-2">
                      <div className="w-3 h-3 bg-[#ea4335] rounded-full"></div>
                      AgriLoop Authorized Facilities
